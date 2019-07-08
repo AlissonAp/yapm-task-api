@@ -8,10 +8,22 @@ module.exports = {
       const query = req.params._id ? req.params : {};
       const projects = await Project.find(query);
 
-        if (!projects)
+        if (!projects.length)
             return res
-                .status(404)
+                .status(200)
                 .send(friendlyResp.notFoundProject());
+
+        //Sort tasks
+        let tasks = []
+        if(req.params._id){
+            tasks = projects[0].tasks;
+            sortedTasks = tasks.sort(function(a,b){
+              var c = new Date(a.dueDate);
+              var d = new Date(b.dueDate);
+              return c-d;
+          });
+          projects[0].tasks = sortedTasks;
+        }
 
         return res.status(200).send({
             projects,

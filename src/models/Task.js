@@ -14,8 +14,15 @@ const TaskSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    closed : {
+        type: Boolean,
+        default : false
+    },
+    closedDate : {
+        type: String
+    },
     dueDate : {
-        type: Date
+        type: String
     }
 
 })

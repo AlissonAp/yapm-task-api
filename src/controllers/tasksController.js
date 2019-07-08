@@ -7,19 +7,29 @@ module.exports = {
   async find(req, res) {
     try {
         const {projectId, _id} = req.params;
-      
+        
         const tasks = await Project.find({
             _id : projectId,
             'tasks._id' : _id
         });
 
-        if (!tasks.length)
+        sortedTasks = tasks.sort(function(a,b){
+            var c = new Date(a.dueDate);
+            var d = new Date(b.dueDate);
+            return c-d;
+        });
+
+        console.log(sortedTasks);
+
+  
+
+        if (!sortedTasks.length)
             return res
                 .status(404)
                 .send(friendlyResp.notFoundTask());
 
         return res.status(200).send({
-            tasks,
+            sortedTasks,
             ...friendlyResp.foundTask()
         });
 
